@@ -1,0 +1,10 @@
+#!/bin/bash
+NAME=$(basename $0)
+
+case $NAME in
+  'puppet' | 'puppetserver')
+    CMD=$NAME
+    ;;
+esac
+
+docker exec -it puppet $CMD $@

@@ -1,0 +1,57 @@
+version: '2'
+services:
+  # Puppet master
+  puppet:
+    container_name: puppet
+    hostname: puppet.example.com
+    image: puppet/puppetserver:6.14.1
+    ports:
+      - 8140:8140
+    volumes:
+      - ./code:/etc/puppetlabs/code/
+      - ./volumes/puppet/ssl:/etc/puppetlabs/puppet/ssl/
+      - ./volumes/puppet/data:/opt/puppetlabs/server/data/puppetserver/
+      #- ./volumes/puppet/hiera.yaml:/etc/puppetlabs/puppet/hiera.yaml
+      #- ./volumes/puppet/auth.conf:/etc/puppetlabs/puppetserver/conf.d/auth.conf
+    environment:
+      - PUPPETDB_SERVER_URLS=https://puppetdb:8081
+    links:
+      - puppetdb
+  # PuppetDB postgres database
+  puppetdb-postgres:
+    container_name: puppetdb-postgres
+    image: postgres:12
+    environment:
+      - POSTGRES_USER=puppetdb
+      - POSTGRES_PASSWORD=puppetdb
+    expose:
+      - 5432
+    volumes:
+      - ./volumes/puppetdb/data:/var/lib/postgresql/data/
+  # PuppetDB instance
+  puppetdb:
+    container_name: puppetdb
+    hostname: puppetdb
+    image: puppet/puppetdb
+    expose:
+      - 8080
+      - 8081
+    environment:
+      - PUPPETDB_POSTGRES_HOSTNAME=puppetdb-postgres
+      - PUPPETDB_USER=puppetdb
+      - PUPPETDB_PASSWORD=puppetdb
+    links:
+      - puppetdb-postgres
+    volumes:
+      - ./volumes/puppetdb/ssl:/opt/puppetlabs/server/data/puppetdb/certs/
+  # Puppetboard
+  puppetboard:
+    container_name: puppetboard
+    image: ghcr.io/voxpupuli/puppetboard
+    environment:
+      - PUPPETDB_HOST=puppetdb
+      - PUPPETBOARD_PORT=8080
+    ports:
+      - 8080:8080
+    links:
+      - puppetdb
