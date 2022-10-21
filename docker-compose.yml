@@ -11,8 +11,7 @@ services:
       - ./code:/etc/puppetlabs/code/
       - ./volumes/puppet/ssl:/etc/puppetlabs/puppet/ssl/
       - ./volumes/puppet/data:/opt/puppetlabs/server/data/puppetserver/
-      #- ./volumes/puppet/hiera.yaml:/etc/puppetlabs/puppet/hiera.yaml
-      #- ./volumes/puppet/auth.conf:/etc/puppetlabs/puppetserver/conf.d/auth.conf
+      - ./config/hiera.yaml:/etc/puppetlabs/puppet/hiera.yaml
     environment:
       - PUPPETDB_SERVER_URLS=https://puppetdb:8081
     links:

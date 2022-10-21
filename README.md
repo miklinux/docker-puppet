@@ -22,6 +22,11 @@ Start the enviornment
 docker compose up
 ```
 
+Deploy puppet environment via r10k
+```sh
+bin/r10k deploy environment production -v
+```
+
 List certificates:
 ```sh
 bin/puppetserver ca list --all
@@ -32,7 +37,7 @@ Sign certificate:
 bin/puppetserver ca sign --certname foo.example.com
 ```
 
-Delete node:
+Remove a node:
 ```sh
 bin/puppet node clean foo.example.com
 bin/pupept node deactivate foo.example.com
