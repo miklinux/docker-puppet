@@ -12,33 +12,46 @@ It can be deactivated setting the `AUTOSIGN=false` enviroment variable in `docke
 but you need to remember to sign the certificate for PuppetDB on the first provisioning:
 
 ```sh
-bin/puppetserver ca sign --certname puppetdb
+./puppetserver ca sign --certname puppetdb
 ```
 
 ## Usage
 
-Start the enviornment
+Clone the repository
 ```sh
-docker compose up
+git clone git@github.com:miklinux/docker-puppet.git
+cd docker-puppet
+```
+
+Start the environment
+```sh
+docker compose up -d
+```
+
+Check logs to ensure the environment is up and running
+```sh
+docker compose logs -f
 ```
 
 Deploy puppet environment via r10k
 ```sh
-bin/r10k deploy environment production -v
+./r10k deploy environment production -v
 ```
+
+## Other commands
 
 List certificates:
 ```sh
-bin/puppetserver ca list --all
+./puppetserver ca list --all
 ```
 
 Sign certificate:
 ```
-bin/puppetserver ca sign --certname foo.example.com
+./puppetserver ca sign --certname foo.example.com
 ```
 
 Remove a node:
 ```sh
-bin/puppet node clean foo.example.com
-bin/pupept node deactivate foo.example.com
+./puppet node clean foo.example.com
+./puppet node deactivate foo.example.com
 ```

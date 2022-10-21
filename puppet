@@ -1,0 +1,3 @@
+#!/bin/bash
+CMD=$(basename $0)
+docker exec -it puppet $CMD $@

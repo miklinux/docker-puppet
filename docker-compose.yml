@@ -9,9 +9,9 @@ services:
       - 8140:8140
     volumes:
       - ./code:/etc/puppetlabs/code/
-      - ./volumes/puppet/ssl:/etc/puppetlabs/puppet/ssl/
-      - ./volumes/puppet/data:/opt/puppetlabs/server/data/puppetserver/
-      - ./config/hiera.yaml:/etc/puppetlabs/puppet/hiera.yaml
+      - ./.volumes/puppet_ssl:/etc/puppetlabs/puppet/ssl/
+      - ./.volumes/puppet_data:/opt/puppetlabs/server/data/puppetserver/
+      - ./.config/hiera.yaml:/etc/puppetlabs/puppet/hiera.yaml
     environment:
       - PUPPETDB_SERVER_URLS=https://puppetdb:8081
     links:
@@ -26,7 +26,7 @@ services:
     expose:
       - 5432
     volumes:
-      - ./volumes/puppetdb/data:/var/lib/postgresql/data/
+      - ./.volumes/puppetdb_postgres_data:/var/lib/postgresql/data/
   # PuppetDB instance
   puppetdb:
     container_name: puppetdb
@@ -42,7 +42,7 @@ services:
     links:
       - puppetdb-postgres
     volumes:
-      - ./volumes/puppetdb/ssl:/opt/puppetlabs/server/data/puppetdb/certs/
+      - ./.volumes/puppetdb_ssl:/opt/puppetlabs/server/data/puppetdb/certs/
   # Puppetboard
   puppetboard:
     container_name: puppetboard

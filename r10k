@@ -1,0 +1,18 @@
+#!/bin/bash
+BASEDIR=$(dirname $(realpath $0))
+CODEDIR="${BASEDIR}/code"
+CONFDIR="${BASEDIR}/.config"
+GITHUB_SSH_HOST_KEY="${BASEDIR}/.github_ssh_hostkey"
+
+[ ! -e "${GITHUB_SSH_HOST_KEY}" ] && \
+  ssh-keyscan github.com 2>/dev/null 1>"${GITHUB_SSH_HOST_KEY}"
+
+docker run --rm \
+  --user root \
+  -e SSH_AUTH_SOCK=${SSH_AUTH_SOCK} \
+  -v ${SSH_AUTH_SOCK}:${SSH_AUTH_SOCK} \
+  -v r10k_cache:/var/cache/r10k \
+  -v ${GITHUB_SSH_HOST_KEY}:/root/.ssh/known_hosts \
+  -v ${CODEDIR}:/etc/puppetlabs/code \
+  -v ${CONFDIR}/r10k.yaml:/etc/puppetlabs/r10k/r10k.yaml \
+  -it puppet/r10k $@
