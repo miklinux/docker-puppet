@@ -4,6 +4,14 @@ defaults:
   data_hash: yaml_data
   datadir: /etc/puppetlabs/code/environments/%{environment}/hieradata
 hierarchy:
+  - name: "Per-node"
+    path: "host/%{facts.domain}/%{facts.hostname}.yaml"
+  - name: "Per-domain"
+    path: "domain/%{facts.domain}.yaml"
+  - name: "Per-operatingsystem-major-release"
+    path: "os/%{facts.operatingsystem}-%{facts.operatingsystemmajrelease}.yaml"
+  - name: "Per-operatingsystem"
+    path: "os/%{facts.operatingsystem}.yaml"
   - name: "Common data"
     path: "common.yaml"
   - name: "Local data"
