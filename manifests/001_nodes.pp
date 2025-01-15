@@ -1,3 +1,3 @@
 # Node definitions
-node 'foo.example.com',
+node /\.example\.(com|lan)$/ {
 }
